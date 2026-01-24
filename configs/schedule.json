@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "examMode": false,
+  "schedule": [
+    {
+      "weekday": "Monday",
+      "videoType": "News",
+      "subject": "CCTV_xw30f",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "dynamic"
+    },
+    {
+      "weekday": "Tuesday",
+      "videoType": "Documentary",
+      "subject": "English",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    },
+    {
+      "weekday": "Wednesday",
+      "videoType": "News",
+      "subject": "CCTV_xw30f",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    },
+    {
+      "weekday": "Thursday",
+      "videoType": "News",
+      "subject": "CCTV_xw30f",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    },
+    {
+      "weekday": "Friday",
+      "videoType": "Documentary",
+      "subject": "English",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    },
+    {
+      "weekday": "Saturday",
+      "videoType": "News",
+      "subject": "CCTV_xw30f",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    },
+    {
+      "weekday": "Sunday",
+      "videoType": "Documentary",
+      "subject": "English",
+      "startTime": [[6, 40], [7, 0]],
+      "endTime": [[7, 15], 30],
+      "closingMethod": "static"
+    }
+  ]
+}
