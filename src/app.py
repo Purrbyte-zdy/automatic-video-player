@@ -5,7 +5,7 @@ from RinUI import RinUIWindow
 
 from loguru import logger
 
-from core.playVideos import AppCentral
+from src.core.central import AppCentral
 
 logger.add("./logs/app.log", rotation="10 MB", retention="10 days", level="DEBUG")
 
