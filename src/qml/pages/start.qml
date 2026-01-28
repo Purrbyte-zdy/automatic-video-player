@@ -22,6 +22,7 @@ FluentPage {
             ButtonGroup {
                 id: videoTypes
             }
+            Layout.alignment: Qt.AlignHCenter
             ToggleButton {
                 text: qsTr("News")
                 checked: true
@@ -47,7 +48,6 @@ FluentPage {
             PillButton {
                 text: qsTr("Force Play")
                 icon.name: "ic_fluent_approvals_app_20_regular"
-                Layout.alignment: Qt.AlignHCenter
                 checked: true
                 checkable: false
                 onClicked: {
