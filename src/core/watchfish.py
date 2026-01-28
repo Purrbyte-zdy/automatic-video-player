@@ -32,8 +32,8 @@ class Timer:
     weekday_cfg: Dict[str, Any]
 
     def __init__(self) -> None:
-        # 配置文件路径（相对于项目根）
-        cfg_path = Path(__file__).parent.parent.parent / "configs" / "schedule.json"
+        root = Path(__file__).parent.parent.parent
+        cfg_path = root / "configs" / "schedule.json"
         logger.debug("Loading schedule config from {}", cfg_path)
 
         if not cfg_path.exists():
