@@ -1,3 +1,5 @@
+import os
+
 from PySide6.QtCore import QObject, Slot
 from src.core.watchfish import VideoTypes
 from src.core.player.play_videos import play
@@ -29,3 +31,12 @@ class AppCentral(QObject):
                 self.video_type = VideoTypes.DOCUMENTARY
             case _:
                 logger.warning("Unknown video type received.")
+
+    @Slot()
+    def new_timeline(self) -> None:
+        logger.info("New timeline requested.")
+        # todo: implement new timeline functionality
+
+    @Slot()
+    def open_github(self) -> None:
+        os.system("start https://github.com/Purrbyte-zdy/automatic-video-player")
