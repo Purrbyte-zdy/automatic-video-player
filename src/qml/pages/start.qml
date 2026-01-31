@@ -13,8 +13,8 @@ FluentPage {
         spacing: 0
         Image {
             source: "file:///C:\\Users\\Zhang\\Documents\\automatic-video-player\\assets\\images\\logo.png"
-            // Layout.preferredWidth: 200
-            // Layout.preferredHeight: 150
+            Layout.preferredWidth: 256
+            Layout.preferredHeight: 256
             fillMode: Image.PreserveAspectFit
         }
 
