@@ -18,7 +18,7 @@ class Play(PlayNews):
         year, month, day, _, hour, _, _ = now
 
         if hour < 13:
-            now = Timer.time(1)
+            now = Timer.time(delta=1)
         year, month, day, _, hour, _, _ = now
 
         cctv_time = f"{year:04d}{month:02d}{day:02d}"
@@ -53,6 +53,16 @@ class Play(PlayNews):
             self.driver.switch_to.window(self.driver.window_handles[-1])
             logger.success("News video page loaded.")
             self.setup_fullscreen()
+
+            timer = Timer()
+            while True:
+                if timer.is_time_for_stop():
+                    logger.info("Reached the scheduled stop time.")
+                    break
+                if self.driver.execute_script("return arguments[0].ended;", d=self.driver.find_element(By.TAG_NAME, "video")):
+                    logger.info("Video playback completed.")
+                    break
+                timer.wait()
             return True
         except TimeoutException:
             return False

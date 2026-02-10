@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from enum import IntEnum
 from pathlib import Path
 from typing import Any, Dict, Tuple
+from time import sleep
 
 import json
 from loguru import logger
@@ -92,6 +93,10 @@ class Timer:
         remaining = (self.end_time - now_dt).total_seconds()
         logger.debug("Checking stop time: now={}, end_time={}, remaining_seconds={}", now_dt, self.end_time, remaining)
         return remaining <= 0
+
+    @staticmethod
+    def wait(second: float = 5) -> None:
+        sleep(second)
 
 
 class Videos(Timer):
