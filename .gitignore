@@ -208,3 +208,6 @@ __marimo__/
 
 # Browser driver
 drivers/
+
+# RinUI
+RinUI/
