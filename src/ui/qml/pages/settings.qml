@@ -12,7 +12,7 @@ FluentPage {
             title: qsTr("Copyright Information")
             description: qsTr("Purrbyte-zdy 2026 All rights reserved.\nUsing the AGPL-3.0 license.")
             ToolButton {
-                id: githubButton
+                id: githubButton  
                 icon.name: "ic_fluent_open_20_regular"
                 onClicked: {
                     console.log("Settings ToolButton clicked");

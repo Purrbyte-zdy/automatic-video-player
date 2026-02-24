@@ -1,5 +1,5 @@
 from loguru import logger
-from src.core.watchfish import Videos, VideoTypes
+from src.core.python.watchfish import Videos, VideoTypes
 
 
 def play(video_type: VideoTypes) -> None:
@@ -9,9 +9,15 @@ def play(video_type: VideoTypes) -> None:
     logger.info(f"Today's video type: {video_type}")
     if video_type == VideoTypes.NEWS:
         logger.info("Playing news video...")
-        from src.core.player.news.xw30f import Play
+        from src.core.python.player.news.xw30f import Play
         player = Play()
-        player.open_page()
+        finished_status = player.open_page()
+        match finished_status:
+            case True:
+                logger.success("News video playback finished successfully.")
+                player.exit_playing()
+            case False:
+                logger.error("News video playback failed.")
 
     elif video_type == VideoTypes.DOCUMENTARY:
         logger.info("Playing documentary video...")

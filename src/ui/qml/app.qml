@@ -8,7 +8,7 @@ FluentWindow {
     title: qsTr("Automatic Video Player")
     width: 900
     height: 556
-
+    // icon.name: "ic_fluent_play_20_regular"
     minimumWidth: 500
     minimumHeight: 400
     visible: true

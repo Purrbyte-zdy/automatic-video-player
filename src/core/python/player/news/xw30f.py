@@ -2,9 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
-from keyboard import press_and_release
-from src.core.player.news import PlayNews
-from src.core.watchfish import Timer
+from src.core.python.player.news import PlayNews
+from src.core.python.watchfish import Timer
 from loguru import logger
 
 class Play(PlayNews):
@@ -25,7 +24,7 @@ class Play(PlayNews):
         logger.debug(f"CCTV time: {cctv_time}")
         return cctv_time
 
-    def open_page(self) -> bool:
+    def open_page(self) -> bool | str:
         if not self.driver:
             return False
 
@@ -59,40 +58,11 @@ class Play(PlayNews):
                 if timer.is_time_for_stop():
                     logger.info("Reached the scheduled stop time.")
                     break
-                if self.driver.execute_script("return arguments[0].ended;", d=self.driver.find_element(By.TAG_NAME, "video")):
+                if self.driver.execute_script("return arguments[0].ended;", self.driver.find_element(By.TAG_NAME, "video")):
                     logger.info("Video playback completed.")
                     break
                 timer.wait()
             return True
         except TimeoutException:
+            logger.error("Failed to load the news video page or find the target news item.")
             return False
-
-    def setup_fullscreen(self) -> bool:
-        try:
-            press_and_release("f")
-            WebDriverWait(self.driver, 2, 0.1).until(
-                lambda d: d.execute_script("""
-                        return !!(document.fullscreenElement || 
-                                 document.webkitFullscreenElement || 
-                                 document.msFullscreenElement);
-                    """)
-            )
-            logger.success(f"Fullscreen setup successful by F.")
-            return True
-        except TimeoutException:
-            logger.warning("Fullscreen setup by F failed, trying shift&f.")
-        try:
-            press_and_release("shift")
-            press_and_release("f")
-            WebDriverWait(self.driver, 2, 0.1).until(
-                lambda d: d.execute_script("""
-                        return !!(document.fullscreenElement || 
-                                 document.webkitFullscreenElement || 
-                                 document.msFullscreenElement);
-                    """)
-            )
-            logger.success(f"Fullscreen setup successful by shift&f.")
-            return True
-        except TimeoutException:
-            logger.warning("Fullscreen setup failed.")
-        return False

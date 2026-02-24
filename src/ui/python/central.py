@@ -1,8 +1,8 @@
 import os
 
 from PySide6.QtCore import QObject, Slot
-from src.core.watchfish import VideoTypes
-from src.core.player.play_videos import play
+from src.core.python.watchfish import VideoTypes
+from src.core.python.player.play_videos import play
 from loguru import logger
 
 class AppCentral(QObject):

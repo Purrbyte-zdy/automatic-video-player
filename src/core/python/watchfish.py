@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 from enum import IntEnum
-from pathlib import Path
 from typing import Any, Dict, Tuple
 from time import sleep
 
 import json
 from loguru import logger
+
+from src.core.python.directories import CONFIG_PATH
 
 
 class VideoTypes(IntEnum):
@@ -33,8 +34,7 @@ class Timer:
     weekday_cfg: Dict[str, Any]
 
     def __init__(self) -> None:
-        root = Path(__file__).parent.parent.parent
-        cfg_path = root / "configs" / "schedule.json"
+        cfg_path = CONFIG_PATH / "schedule.json"
         logger.debug("Loading schedule config from {}", cfg_path)
 
         if not cfg_path.exists():
