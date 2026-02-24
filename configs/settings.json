@@ -1,4 +1,6 @@
 {
-  "version": "1.0.0",
-  "driver_path": "msedgedriver.exe"
+    "config_version": "1.0.0",
+    "app_version": "Crescent-dev00006",
+    "first_launch": true,
+    "driver_name": "msedgedriver.exe"
 }
