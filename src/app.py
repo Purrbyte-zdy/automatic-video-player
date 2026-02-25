@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication
 from RinUI import RinUIWindow
 from loguru import logger
 
-from src.core.python import setup_system_tray
+from src.core.python import setup_system_tray, ROOT_PATH
 from src.core.python.directories import CONFIG_PATH, LOGS_PATH, DRIVER_PATH
 from src.ui.python.central import AppCentral
 
@@ -19,7 +19,7 @@ with open(config_file, 'r+', encoding='UTF-8') as f:
         dump(config, f, ensure_ascii=False, indent=4)
 
 # noinspection SpellCheckingInspection
-logger.add(sink="./logs/AVP_{{time:YYYYMMDD-HHmmss}}_{version}.log".format(version=config["app_version"]),
+logger.add(sink=ROOT_PATH / "logs/AVP_{{time:YYYYMMDD-HHmmss}}_{version}.log".format(version=config["app_version"]),
            rotation="10 MB",
            retention="10 days",
            level="DEBUG")
