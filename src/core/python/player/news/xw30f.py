@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from src.core.python.player.news import PlayNews
-from src.core.python.watchfish import Timer
+from core.python.utils.watchfish import Timer
 from loguru import logger
 
 class Play(PlayNews):

@@ -1,5 +1,5 @@
 from loguru import logger
-from src.core.python.watchfish import Videos, VideoTypes
+from core.python.utils.watchfish import Videos, VideoTypes
 
 
 def play(video_type: VideoTypes) -> None:
