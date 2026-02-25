@@ -6,6 +6,32 @@ FluentPage {
     Column {
         Layout.fillWidth: true
         spacing: 3
+        SettingExpander {
+            width: parent.width
+            icon.name: "ic_fluent_internet_20_regular"
+            title: qsTr("Browser Driver Name")
+            description: qsTr("Put the driver into the folder and type the name.")
+            expanded: true
+            SettingItem {
+                width: parent.width
+                TextField {
+                    id: driverNameField
+                    width: parent.width
+                    placeholderText: qsTr("Driver Name")
+                    onAccepted: {
+                        AppCentral.set_browser_driver_name(driverNameField.text.toString());
+                    }
+                }
+            }
+            Button {
+                id: openDriverFolderButton
+                icon.name: "ic_fluent_open_20_regular"
+                onClicked: {
+                    console.log("Open Driver Folder Button clicked");
+                    AppCentral.open_driver_folder();
+                }
+            }
+        }
         SettingCard {
             width: parent.width
             icon.name: "ic_fluent_info_20_regular"
