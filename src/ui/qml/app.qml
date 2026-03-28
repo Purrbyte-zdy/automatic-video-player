@@ -31,14 +31,14 @@ FluentWindow {
             page: Qt.resolvedUrl("pages/news.qml"),
         },
         {
-            title: qsTr("Documentary"),
+            title: qsTr("Documentaries"),
             icon: "ic_fluent_video_20_regular",
-            page: Qt.resolvedUrl("pages/documentary.qml"),
+            page: Qt.resolvedUrl("pages/documentaries.qml"),
         },
         {
-            title: qsTr("Log"),
+            title: qsTr("Logs"),
             icon: "ic_fluent_note_20_regular",
-            page: Qt.resolvedUrl("pages/log.qml"),
+            page: Qt.resolvedUrl("pages/logs.qml"),
         },
         {
             title: qsTr("Settings"),
