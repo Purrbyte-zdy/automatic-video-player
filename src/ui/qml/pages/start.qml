@@ -55,5 +55,14 @@ FluentPage {
                 }
             }
         }
+        Item { Layout.preferredHeight: 100 }
+        Button {
+            text: qsTr("Normal Play")
+            icon.name: "ic_fluent_play_20_regular"
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                AppCentral.normal_play();
+            }
+        }
     }
 }
