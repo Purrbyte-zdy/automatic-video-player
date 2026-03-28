@@ -7,9 +7,11 @@ from core.python.utils.watchfish import Timer
 from loguru import logger
 
 class Play(PlayNews):
-    def __init__(self) -> None:
+    def __init__(self, force_mode) -> None:
         super().__init__()
         self.url = "https://tv.cctv.com/lm/xw30f/"
+        self.force_mode = force_mode
+        logger.debug("force_mode in Play: {}", self.force_mode)
 
     @property
     def format_cctv_time(self) -> str:
@@ -53,7 +55,7 @@ class Play(PlayNews):
             logger.success("News video page loaded.")
             self.setup_fullscreen()
 
-            timer = Timer()
+            timer = Timer(self.force_mode)
             while True:
                 if timer.is_time_for_stop():
                     logger.info("Reached the scheduled stop time.")

@@ -1,8 +1,10 @@
 from loguru import logger
-from core.python.utils.watchfish import Videos, VideoTypes
+from core.python.utils.watchfish import Videos
+from core.python.utils import VideoTypes
 
 
-def play(video_type: VideoTypes) -> None:
+def play(video_type: VideoTypes, force_mode=False) -> None:
+    logger.debug("force_mode: {}", force_mode)
     videos = Videos()
     if video_type == VideoTypes.UNKNOWN:
         video_type = videos.get_video_type()
@@ -10,7 +12,7 @@ def play(video_type: VideoTypes) -> None:
     if video_type == VideoTypes.NEWS:
         logger.info("Playing news video...")
         from src.core.python.player.news.xw30f import Play
-        player = Play()
+        player = Play(force_mode=force_mode)
         finished_status = player.open_page()
         match finished_status:
             case True:
