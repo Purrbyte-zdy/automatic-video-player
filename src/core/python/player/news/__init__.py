@@ -14,7 +14,7 @@ from src.core.python.directories import CONFIG_PATH, DRIVER_PATH
 
 
 class PlayNews(object):
-    def __init__(self):
+    def __init__(self) -> None:
         config_file = CONFIG_PATH / "settings.json"
         with open(config_file, 'r', encoding='UTF-8') as f:
             config = load(f)
