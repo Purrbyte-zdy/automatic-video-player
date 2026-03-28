@@ -4,7 +4,7 @@ from PySide6.QtCore import QObject, Slot
 
 from core.python.utils.editor import ConfigEditor
 from src.core.python.directories import DRIVER_PATH
-from core.python.utils.watchfish import VideoTypes
+from core.python.utils import VideoTypes
 from src.core.python.player.play_videos import play
 from loguru import logger
 
@@ -41,6 +41,10 @@ class AppCentral(QObject):
     def set_browser_driver_name(self, driver_name: str) -> None:
         self.setup.set_browser_driver_name(driver_name)
 
+    @Slot(int, int, int)
+    def set_time(self, hour: int, minute: int, time_type: int) -> None:
+        self.setup.set_time(hour, minute, time_type)
+
 
 
 class Setup(object):
@@ -75,6 +79,15 @@ class Setup(object):
         config_editor = ConfigEditor()
         config_editor.setconfig("driver_name", driver_name)
 
+    def set_time(self, hour: int, minute: int, time_type: int) -> None:
+        match time_type:
+            case 0:
+                logger.info(f"Setting Playback Time to {hour:02d}:{minute:02d}")
+            case 1:
+                logger.info(f"Setting End Time to {hour:02d}:{minute:02d}")
+
+        # todo: edit the schedule configuration with the new time
+
 class VideoPlay(object):
     def __init__(self) -> None:
         self.video_type = VideoTypes.NEWS
@@ -100,5 +113,5 @@ class ForcePlay(VideoPlay):
 
     def _force_play(self) -> bool:
         logger.debug("Forcing play")
-        play(self.video_type)
+        play(self.video_type, force_mode=True)
         return True
