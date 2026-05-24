@@ -2,9 +2,9 @@ import os
 
 from PySide6.QtCore import QObject, Slot
 
-from core.python.utils.editor import ConfigEditor
+from src.core.python.utils.editor import ConfigEditor
 from src.core.python.directories import DRIVER_PATH
-from core.python.utils import VideoTypes
+from src.core.python.utils import VideoTypes
 from src.core.python.player.play_videos import play
 from loguru import logger
 
