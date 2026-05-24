@@ -1,0 +1,213 @@
+name: Build & Release AVP # 工作流名称：构建并发布 AVP
+
+on: # 触发器配置
+  push: # 当发生 push 时触发
+    tags: # 如果 push 是带 tag 的
+      - "*" # 匹配所有 tag
+  workflow_dispatch: # 支持手动触发工作流
+    inputs: # 手动触发时可填写的输入参数
+      upload2webdav: # 输入：是否上传到 webdav/网盘
+        description: 'Upload to...' # 描述
+        required: true # 必填
+        default: 'None' # 默认值
+        type: choice # 类型为选择
+        options: # 可选项
+          - None # 不上传
+          - 123Pan # 上传到 123Pan
+          - OneDrive # 上传到 OneDrive
+          - Both # 两者都上传
+      release: # 输入：是否创建 GitHub Release
+        description: 'Create GitHub Release' # 描述
+        required: true # 必填
+        default: false # 默认不创建发布
+        type: boolean # 布尔类型
+      prerelease: # 输入：是否标记为预发布
+        description: 'Mark as Pre-release' # 描述
+        required: false # 非必填
+        default: true # 默认标记为预发布
+        type: boolean # 布尔类型
+
+permissions: # 权限配置
+  contents: write # 允许写入仓库内容（用于创建 release 等）
+
+jobs: # 作业定义
+  build: # 名为 build 的作业
+    runs-on: ${{ matrix.os }} # 在矩阵指定的操作系统上运行
+    strategy: # 策略配置（矩阵）
+      matrix: # 矩阵定义
+        os: [windows-latest, macos-latest] # 在 Windows 和 macOS 上分别运行
+
+    steps: # 步骤列表
+      - name: ⬇️ Checkout code # 步骤：检出代码
+        uses: actions/checkout@v5 # 使用官方 checkout 操作
+
+      - name: 📦 Set up Python & Install uv # 步骤：设置 Python 并安装 uv 工具
+        uses: astral-sh/setup-uv@v6 # 使用 setup-uv action
+
+      - name: 📦 Cache dependencies # 步骤：缓存依赖
+        uses: actions/cache@v4 # 使用缓存 action
+        with: # 缓存参数
+          path: ~/.cache/uv # 缓存路径
+          key: uv-${{ runner.os }}-${{ github.workflow }}-${{ hashFiles('uv.lock') }} # 缓存 key
+          restore-keys: | # 恢复键
+            uv-${{ runner.os }}-${{ github.workflow }}- # 恢复前缀
+
+      - name: 📦 Install dependencies # 步骤：安装依赖
+        run: | # 运行 shell 命令
+          uv sync # 同步 uv 环境
+          uv pip install pyinstaller # 通过 uv 的 pip 安装 pyinstaller
+
+      - name: 🔨 Build AVP (Windows) # 在 Windows 上构建
+        if: runner.os == 'Windows' # 仅在 Windows runner 上执行
+        shell: bash # 使用 bash shell
+        run: | # 运行构建命令
+          uv run pyinstaller --noconsole \ # 使用 pyinstaller 构建，不显示控制台
+            --icon "assets/images/logo.ico" \ # 指定程序图标（Windows ico）
+            --add-data "src/ui:src/ui" \ # 包含 qml 目录
+            --add-data "src/plugins:src/plugins" \ # 包含插件目录
+            --add-data "assets:assets" \ # 包含 assets 目录
+            --add-data "LICENSE:." \ # 包含 LICENSE
+            --paths=. \ # 添加当前路径到 pyinstaller 搜索路径
+            --contents-directory . \ # 内容目录参数
+            --name="Automatic Video Player" \ # 可执行文件名
+            src/app.py # 打包的入口脚本
+
+      - name: 🔨 Build AVP (macOS) # 在 macOS 上构建
+        if: runner.os == 'macOS' # 仅在 macOS runner 上执行
+        shell: bash # 使用 bash shell
+        run: | # 运行构建命令
+          uv run pyinstaller --noconsole \ # pyinstaller 构建，不显示控制台
+            --icon "assets/images/logo.icns" \ # 指定 macOS 图标（icns）
+            --add-data "src/ui:src/ui" \ # 包含 qml 目录
+            --add-data "src/plugins:src/plugins" \ # 包含插件目录
+            --add-data "assets:assets" \ # 包含 assets 目录
+            --add-data "LICENSE:." \ # 包含 LICENSE
+            --paths=. \ # 添加当前路径
+            --contents-directory . \ # 内容目录参数
+            --name="Automatic Video Player" \ # 可执行名
+            src/app.py # 入口脚本
+
+      - name: 📦 Zip build (Windows) # Windows 平台将输出压缩
+        if: runner.os == 'Windows' # 仅 Windows
+        shell: pwsh # 使用 PowerShell
+        run: | # 运行压缩命令
+          Compress-Archive -Path "dist/Automatic Video Player/*" -DestinationPath "dist/AVP-Windows.zip" # 使用 PowerShell 压缩为 zip
+
+      - name: 📦 Zip build (macOS) # macOS 平台将输出压缩
+        if: runner.os == 'macOS' # 仅 macOS
+        shell: bash # 使用 bash
+        run: | # 运行压缩命令
+          cd dist # 进入 dist 目录
+          ditto -c -k --sequesterRsrc --keepParent "Automatic Video Player".app AVP-macOS.zip # 使用 ditto 打包 macOS 应用为 zip
+
+      - name: ☁️ Upload artifact (Windows) # 上传构建产物（Windows）
+        if: runner.os == 'Windows' # 仅 Windows
+        uses: actions/upload-artifact@v4 # 使用上传 artifact action
+        with: # 参数
+          name: AVP-Windows # artifact 名称
+          path: dist/AVP-Windows.zip # 要上传的路径
+
+      - name: ☁️ Upload artifact (macOS) # 上传构建产物（macOS）
+        if: runner.os == 'macOS' # 仅 macOS
+        uses: actions/upload-artifact@v4 # 使用上传 artifact action
+        with: # 参数
+          name: AVP-macOS # artifact 名称
+          path: dist/AVP-macOS.zip # 要上传的路径
+
+  release: # release 作业
+    needs: [build] # 依赖 build 作业完成
+    runs-on: ubuntu-latest # 在 Ubuntu 上运行
+
+    steps: # 步骤
+      - name: ⬇️ Checkout code # 检出代码
+        uses: actions/checkout@v5 # 使用 checkout
+        with: # 参数
+          fetch-depth: 0 # 拉取全部历史记录（用于生成 changelog）
+
+      - name: ⬇️ Download artifacts # 下载之前上传的 artifacts
+        uses: actions/download-artifact@v5 # 使用下载 artifact action
+        with: # 参数
+          path: dist/ # 下载到 dist/ 目录
+
+      - name: 🗃 Move release files to root dist/ # 将 release 文件移动到根级 dist/
+        run: | # 运行命令
+          echo "::group::Show downloaded structure" # 开始日志分组，便于折叠
+          ls -R dist/ # 递归列出 dist 结构
+          echo "::endgroup::" # 结束日志分组
+          mv dist/AVP-Windows/*.zip dist/ # 移动 Windows zip 到根 dist
+          mv dist/AVP-macOS/*.zip dist/ # 移动 macOS zip 到根 dist
+
+      - name: 🧱 Set up git-cliff # 设置 git-cliff（用于生成 changelog）
+        uses: kenji-miyake/setup-git-cliff@v2 # 使用 setup-git-cliff action
+
+      - name: 📜 Generate CHANGELOG.md # 生成 CHANGELOG.md
+        run: | # 运行生成命令
+          git cliff --latest --tag "${{ github.ref_name }}" --config .git-cliff.toml > CHANGELOG.md # 使用 git-cliff 生成变更日志并输出到文件
+
+      - name: 🚀 Create GitHub Release # 创建 GitHub Release
+        uses: softprops/action-gh-release@v2 # 使用 action-gh-release
+        # 推送/手动+发布 ==> 发布
+        if: ${{  github.event_name == 'push' || github.event.inputs.release == 'true' }} # 当是 push 或 手动选择发布 时才创建发布
+        with: # 参数
+          name: Class Widgets ${{ github.ref_name }} # 发布名称，包含 tag
+          tag_name: ${{ github.ref_name }} # tag 名称
+          body_path: CHANGELOG.md # 发布说明来自 CHANGELOG.md
+          prerelease: ${{ github.event_name == 'push' || github.event.inputs.prerelease }} # 是否标记预发布
+          files: | # 附带的文件
+            dist/AVP-Windows.zip # Windows 包
+            dist/AVP-macOS.zip # macOS 包
+        env: # 环境变量
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # 使用 secrets 中的 token
+
+      - name: 📤 Upload CHANGELOG & packages to 123Pan # 将 CHANGELOG 与包上传到 123Pan WebDAV
+        # 推送/手动+上传 ==> 上传
+        if: success() &&  # 仅当前面步骤成功并且满足下列条件时执行
+          ( github.event_name == 'push' ||
+           github.event.inputs.upload2webdav == '123Pan' ||
+           github.event.inputs.upload2webdav == 'Both') # 条件：push 或 选择上传到 123Pan 或 Both
+        run: | # 运行上传脚本
+          VERSION="${{ github.ref_name }}" # 读取当前的 tag/version
+          ENCODED_VERSION=$(echo "$VERSION" | sed 's/ /%20/g') # 将空格编码为 %20
+
+          # Create directory
+          curl -v -u "${{ secrets.PAN_USER }}:${{ secrets.PAN_PASS }}" \
+               -X MKCOL "https://webdav.123pan.cn/webdav/${ENCODED_VERSION}" # 使用 MKCOL 在 123Pan 上创建目录
+
+          # Upload files
+          curl -u "${{ secrets.PAN_USER }}:${{ secrets.PAN_PASS }}" \
+            -T "CHANGELOG.md" \
+            "https://webdav.123pan.cn/webdav/${ENCODED_VERSION}/CHANGELOG.md" # 上传 CHANGELOG
+
+          curl -u "${{ secrets.PAN_USER }}:${{ secrets.PAN_PASS }}" \
+            -T "dist/AVP-Windows.zip" \
+            "https://webdav.123pan.cn/webdav/${ENCODED_VERSION}/AVP-Windows.zip" # 上传 Windows zip
+
+          curl -u "${{ secrets.PAN_USER }}:${{ secrets.PAN_PASS }}" \
+            -T "dist/AVP-macOS.zip" \
+            "https://webdav.123pan.cn/webdav/${ENCODED_VERSION}/AVP-macOS.zip" # 上传 macOS zip
+
+      - name: 📤 Upload CHANGELOG & packages to OneDrive # 将 CHANGELOG 与包上传到 OneDrive (Koofr WebDAV 接口)
+        if: success() &&
+          (github.event_name == 'push' ||
+          github.event.inputs.upload2webdav == 'OneDrive' ||
+          github.event.inputs.upload2webdav == 'Both') # 条件：push 或 选择 OneDrive 或 Both
+        run: | # 运行上传脚本
+          VERSION="${{ github.ref_name }}" # 获取 tag/version
+          ENCODED_VERSION=$(echo "$VERSION" | sed 's/ /%20/g') # 空格编码为 %20
+
+          # Create directory
+          curl -v -u "${{ secrets.ONEDRIVE_USER }}:${{ secrets.ONEDRIVE_PASS }}" \
+               -X MKCOL "https://app.koofr.net/dav/1Drv/automatic-video-player/${ENCODED_VERSION}" # 在 OneDrive (Koofr) 上创建目录
+
+          # Upload files
+          curl -u "${{ secrets.ONEDRIVE_USER }}:${{ secrets.ONEDRIVE_PASS }}" \
+            -T "CHANGELOG.md" \
+            "https://app.koofr.net/dav/1Drv/automatic-video-player/${ENCODED_VERSION}/CHANGELOG.md" # 上传 CHANGELOG
+
+          curl -u "${{ secrets.ONEDRIVE_USER }}:${{ secrets.ONEDRIVE_PASS }}" \
+            -T "dist/AVP-Windows.zip" \
+            "https://app.koofr.net/dav/1Drv/automatic-video-player/${ENCODED_VERSION}/AVP-Windows.zip" # 上传 Windows zip
+
+          curl -u "${{ secrets.ONEDRIVE_USER }}:${{ secrets.ONEDRIVE_PASS }}" \
+            -T "dist/AVP-macOS.zip" \
+            "https://app.koofr.net/dav/1Drv/automatic-video-player/${ENCODED_VERSION}/AVP-macOS.zip" # 上传 macOS zip
