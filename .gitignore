@@ -206,7 +206,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Browser driver
+# Browser Driver
 drivers/
 
 # RinUI
@@ -214,3 +214,5 @@ RinUI/
 
 # Logs
 logs/
+
+# Config
