@@ -3,7 +3,7 @@ name: Build & Release AVP # 工作流名称：构建并发布 AVP
 on: # 触发器配置
   push: # 当发生 push 时触发
     tags: # 如果 push 是带 tag 的
-      - "*" # 匹配所有 tag
+      - "v*" # 匹配 tag v*（例如 v1.0.0）
   workflow_dispatch: # 支持手动触发工作流
     inputs: # 手动触发时可填写的输入参数
       upload2webdav: # 输入：是否上传到 webdav/网盘
@@ -157,11 +157,11 @@ jobs: # 作业定义
             dist/AVP-Windows.zip # Windows 包
             dist/AVP-macOS.zip # macOS 包
         env: # 环境变量
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # 使用 secrets 中的 token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}$     # 使用 secrets 中的 token
 
       - name: 📤 Upload CHANGELOG & packages to 123Pan # 将 CHANGELOG 与包上传到 123Pan WebDAV
         # 推送/手动+上传 ==> 上传
-        if: success() &&  # 仅当前面步骤成功并且满足下列条件时执行
+        if: success() &&
           ( github.event_name == 'push' ||
            github.event.inputs.upload2webdav == '123Pan' ||
            github.event.inputs.upload2webdav == 'Both') # 条件：push 或 选择上传到 123Pan 或 Both
