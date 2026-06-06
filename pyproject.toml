@@ -1,0 +1,14 @@
+[project]
+name = "automatic-video-player"
+version = "0.1.0-pre1"
+description = "Automatic Playing News Every Day."
+requires-python = ">=3.12.0, <3.13"
+dependencies = [
+    "keyboard>=0.13.5",
+    "loguru>=0.7.3",
+    "rinui>=0.2.0",
+    "selenium>=4.41.0",
+]
+
+[tool.uv]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
