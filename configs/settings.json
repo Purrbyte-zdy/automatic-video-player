@@ -1,6 +1,7 @@
 {
-    "config_version": "1.0.0",
-    "app_version": "Crescent-dev1",
+    "config_version": "1.0.1",
+    "app_version": "Crescent-dev3",
     "first_launch": false,
-    "driver_name": "msedgedriver.exe"
+    "driver_name": "geckodriver",
+    "browser_name": "Firefox"
 }

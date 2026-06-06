@@ -9,7 +9,7 @@ from src.core.python.directories import CONFIG_PATH, LOGS_PATH, DRIVER_PATH
 from src.ui.python.central import AppCentral
 
 config_file = CONFIG_PATH / "settings.json"
-with open(config_file, 'r+', encoding='UTF-8') as f:
+with open(config_file, 'r+', encoding='UTF-8') as f: # Setting First Launch Mode.
     config = load(f)
     if config["first_launch"]:
         LOGS_PATH.mkdir(exist_ok=True)
@@ -19,9 +19,9 @@ with open(config_file, 'r+', encoding='UTF-8') as f:
         dump(config, f, ensure_ascii=False, indent=4)
 
 # noinspection SpellCheckingInspection
-logger.add(sink=ROOT_PATH / "logs/AVP_{{time:YYYYMMDD-HHmmss}}_{version}.log".format(version=config["app_version"]),
-           rotation="10 MB",
-           retention="10 days",
+logger.add(sink=ROOT_PATH / "logs/AVP_{{time:MMDDHHmmss}}_{version}.log".format(version=config["app_version"]),
+           rotation="4 MB",
+           retention="7 days",
            level="DEBUG")
 
 if __name__ == '__main__':
@@ -31,5 +31,6 @@ if __name__ == '__main__':
     instance = AppCentral()
     gallery.engine.rootContext().setContextProperty("AppCentral", instance)
     # setup_system_tray(app, gallery)
+    import src.core.python.utils.start_playing
     app.exec()
     logger.info("App ended.")
