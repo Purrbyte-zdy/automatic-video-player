@@ -61,31 +61,31 @@ jobs: # 作业定义
         if: runner.os == 'Windows' # 仅在 Windows runner 上执行
         shell: bash # 使用 bash shell
         run: | # 运行构建命令
-          uv run pyinstaller --noconsole \ # 使用 pyinstaller 构建，不显示控制台
-            --icon "assets/images/logo.ico" \ # 指定程序图标（Windows ico）
-            --add-data "src/ui:src/ui" \ # 包含 qml 目录
-            --add-data "src/plugins:src/plugins" \ # 包含插件目录
-            --add-data "assets:assets" \ # 包含 assets 目录
-            --add-data "LICENSE:." \ # 包含 LICENSE
-            --paths=. \ # 添加当前路径到 pyinstaller 搜索路径
-            --contents-directory . \ # 内容目录参数
-            --name="Automatic Video Player" \ # 可执行文件名
-            src/app.py # 打包的入口脚本
+          uv run pyinstaller --noconsole \
+            --icon "assets/images/logo.ico" \
+            --add-data "src/ui:src/ui" \
+            --add-data "src/plugins:src/plugins" \
+            --add-data "assets:assets" \
+            --add-data "LICENSE:." \
+            --paths=. \
+            --contents-directory . \
+            --name="Automatic Video Player" \
+            src/app.py
 
       - name: 🔨 Build AVP (macOS) # 在 macOS 上构建
         if: runner.os == 'macOS' # 仅在 macOS runner 上执行
         shell: bash # 使用 bash shell
         run: | # 运行构建命令
-          uv run pyinstaller --noconsole \ # pyinstaller 构建，不显示控制台
-            --icon "assets/images/logo.icns" \ # 指定 macOS 图标（icns）
-            --add-data "src/ui:src/ui" \ # 包含 qml 目录
-            --add-data "src/plugins:src/plugins" \ # 包含插件目录
-            --add-data "assets:assets" \ # 包含 assets 目录
-            --add-data "LICENSE:." \ # 包含 LICENSE
-            --paths=. \ # 添加当前路径
-            --contents-directory . \ # 内容目录参数
-            --name="Automatic Video Player" \ # 可执行名
-            src/app.py # 入口脚本
+          uv run pyinstaller --noconsole \
+            --icon "assets/images/logo.icns" \
+            --add-data "src/ui:src/ui" \
+            --add-data "src/plugins:src/plugins" \
+            --add-data "assets:assets" \
+            --add-data "LICENSE:." \
+            --paths=. \
+            --contents-directory . \
+            --name="Automatic Video Player" \
+            src/app.py
 
       - name: 📦 Zip build (Windows) # Windows 平台将输出压缩
         if: runner.os == 'Windows' # 仅 Windows
