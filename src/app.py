@@ -1,14 +1,15 @@
+import os
 import sys
 from json import load, dump
 from PySide6.QtWidgets import QApplication
 from RinUI import RinUIWindow
 from loguru import logger
 
-from src.core.python import setup_system_tray, ROOT_PATH
-from src.core.python.directories import CONFIG_PATH, LOGS_PATH, DRIVER_PATH
-from src.ui.python.central import AppCentral
+# from src.core.python import setup_system_tray, ROOT_PATH
+from src.directories import ROOT_PATH, CONFIGS_PATH, LOGS_PATH, DRIVER_PATH, PathManager
+from src.core import AppCentral
 
-config_file = CONFIG_PATH / "settings.json"
+config_file = CONFIGS_PATH / "settings.json"
 with open(config_file, 'r+', encoding='UTF-8') as f: # Setting First Launch Mode.
     config = load(f)
     if config["first_launch"]:
@@ -24,12 +25,14 @@ logger.add(sink=ROOT_PATH / "logs/AVP_{{time:MMDDHHmmss}}_{version}.log".format(
            retention="7 days",
            level="DEBUG")
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+sys.path.insert(0, project_root)
+
 if __name__ == '__main__':
     logger.info("App started.")
     app = QApplication(sys.argv)
     gallery = RinUIWindow("./ui/qml/app.qml")
-    instance = AppCentral()
-    gallery.engine.rootContext().setContextProperty("AppCentral", instance)
+    instance1 = AppCentral()
     # setup_system_tray(app, gallery)
     import src.core.python.utils.start_playing
     app.exec()

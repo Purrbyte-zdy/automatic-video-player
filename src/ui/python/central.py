@@ -1,17 +1,78 @@
 import os
 
-from PySide6.QtCore import QObject, Slot
+from typing import Optional, Any, Protocol
+
+from PySide6.QtCore import QObject, Slot, Signal
+from PySide6.QtWidgets import QApplication
 
 from src.core.python.utils.editor import ConfigEditor
-from src.core.python.directories import DRIVER_PATH
+from src.directories import DRIVER_PATH, PathManager
 from src.core.python.utils import VideoTypes
 from src.core.python.player.play_videos import play
 from loguru import logger
 
+class QmlContextWindow(Protocol):
+    engine: Any
+
 class AppCentral(QObject):
-    def __init__(self) -> None:
+    _instance: Optional[AppCentral] = None
+    initialized = Signal()
+
+    def __init__(self) -> None:  # 初始化
         super().__init__()
+
+        if AppCentral._instance is not None:
+            raise RuntimeError("AppCentral is a singleton. Use AppCentral.instance() instead.")
+        AppCentral._instance = self
+
+        self._initialize_cores()
+        logger.info("AppCentral initialization completed.")
+
         self.setup = Setup()
+
+    def _initialize_cores(self) -> None:
+        self.app_instance: Optional[QApplication] = QApplication.instance()
+        self.path_manager: PathManager = PathManager()  # 统一路径管理
+
+    def run(self) -> None:  # 运行
+        self._load_config()  # 加载配置
+        self._load_translator()  # 加载翻译
+
+        if self.multi_instances:
+            if not (getattr(sys, "frozen", False) and sys.platform == "darwin"):
+                logger.info("Not running in a frozen macOS app. Skipped single instance check.")
+                self.quit()
+            self.window_manager.open_single_instance_dialog()
+        else:
+            self.init()
+
+    @Slot()
+    def init(self) -> None:
+        # if not getattr(self.configs.app, "tutorial_completed", False):
+        #     from src.core.windows import Tutorial
+        #
+        #     logger.info("Tutorial not completed, showing tutorial window first.")
+        #     self.tutorial_window = Tutorial(self)
+        #     self.tutorial_window.root_window.show()
+        #     return
+
+        # self._setup_logging()
+
+        # if self._class_swap_manager.hasTodaySwaps():
+        #     self.window_manager.ensure("class_swap_restore")
+        #     self._startup_swap_restore_pending = True
+        #     logger.warning("Detected temporary class swaps for today on startup, prompting user for action")
+        #     self.window_manager.open_class_swap_restore()
+        #     return
+
+        self._continue_init()
+
+    def _continue_init(self) -> None:
+        # self._load_runtime()  # 加载运行时(以及插件)
+        # self._init_tray_icon()  # 初始化托盘图标
+        # self._run_utils()
+        self.initialized.emit()  # 发送信号
+        logger.info(f"Initialization completed.")
 
     @Slot()
     def force_play(self) -> None:
@@ -44,7 +105,6 @@ class AppCentral(QObject):
     @Slot(int, int, int)
     def set_time(self, hour: int, minute: int, time_type: int) -> None:
         self.setup.set_time(hour, minute, time_type)
-
 
 
 class Setup(object):
@@ -88,6 +148,7 @@ class Setup(object):
 
         # todo: edit the schedule configuration with the new time
 
+
 class VideoPlay(object):
     def __init__(self) -> None:
         self.video_type = VideoTypes.NEWS
@@ -96,6 +157,7 @@ class VideoPlay(object):
     def normal_play() -> None:
         logger.info("Starting normal play")
         play(VideoTypes.UNKNOWN)
+
 
 class ForcePlay(VideoPlay):
     def __init__(self) -> None:

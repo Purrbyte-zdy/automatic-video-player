@@ -1,5 +1,5 @@
 from loguru import logger
-from core.python.utils.watchfish import Videos
+from shit.python.utils.watchfish import Videos
 from core.python.utils import VideoTypes
 
 

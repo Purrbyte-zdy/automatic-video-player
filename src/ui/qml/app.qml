@@ -30,16 +30,16 @@ FluentWindow {
             icon: "ic_fluent_news_20_regular",
             page: Qt.resolvedUrl("pages/news.qml"),
         },
-        {
-            title: qsTr("Documentaries"),
-            icon: "ic_fluent_video_20_regular",
-            page: Qt.resolvedUrl("pages/documentaries.qml"),
-        },
-        {
-            title: qsTr("Logs"),
-            icon: "ic_fluent_note_20_regular",
-            page: Qt.resolvedUrl("pages/logs.qml"),
-        },
+        // {
+        //     title: qsTr("Documentaries"),
+        //     icon: "ic_fluent_video_20_regular",
+        //     page: Qt.resolvedUrl("pages/documentaries.qml"),
+        // },
+        // {
+        //     title: qsTr("Logs"),
+        //     icon: "ic_fluent_note_20_regular",
+        //     page: Qt.resolvedUrl("pages/logs.qml"),
+        // },
         {
             title: qsTr("Settings"),
             icon: "ic_fluent_settings_20_regular",

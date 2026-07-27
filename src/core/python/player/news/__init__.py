@@ -9,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.remote.webdriver import WebDriver
 from typing import cast
 
-from src.core.python.directories import CONFIG_PATH
+from src.directories import CONFIG_PATH
 
 
 class PlayNews(object):

@@ -4,7 +4,7 @@ from PySide6.QtCore import Slot
 from loguru import logger
 from pathlib import Path
 
-from src.core.python.directories import ROOT_PATH
+from src.directories import ROOT_PATH
 
 # Dynamically import QAction to handle potential import issues
 try:

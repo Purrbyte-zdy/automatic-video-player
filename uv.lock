@@ -18,6 +18,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "keyboard" },
     { name = "loguru" },
+    { name = "pyside6" },
     { name = "rinui" },
     { name = "selenium" },
 ]
@@ -26,8 +27,9 @@ dependencies = [
 requires-dist = [
     { name = "keyboard", specifier = ">=0.13.5" },
     { name = "loguru", specifier = ">=0.7.3" },
-    { name = "rinui", specifier = ">=0.2.0" },
-    { name = "selenium", specifier = ">=4.41.0" },
+    { name = "pyside6", specifier = ">=6.11.1" },
+    { name = "rinui", specifier = ">=0.4.2" },
+    { name = "selenium", specifier = ">=4.46.0" },
 ]
 
 [[package]]
@@ -2516,21 +2518,21 @@ wheels = [
 
 [[package]]
 name = "rinui"
-version = "0.4.0"
+version = "0.4.2"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "darkdetect" },
     { name = "pyside6" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/ee/b3/65940a881ad6ad9e49087c604657c239f580ea909ddc683681addc9e940a/rinui-0.4.0.tar.gz", hash = "sha256:e9420535f5a6348da8977a2dbe5c3984538002ac1876194c9efeefbd8649f378", size = 1002609, upload-time = "2026-05-30T17:34:22.517Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/86/dc/476caef1905a26339a9e6ef5c184b40df8a231f404cd09de6940b0e53a8e/rinui-0.4.2.tar.gz", hash = "sha256:2eedc889bd564c4cdd2974d1486373b446d00eb8ceef12a24f5beedbcbc24eb1", size = 1060051, upload-time = "2026-07-19T15:35:47.806Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/c5/76/f94ba67eec8a6481b85e9fcb0c028a2e2cd79e981a0da11fe54189ba3674/rinui-0.4.0-py3-none-any.whl", hash = "sha256:11f1549306d64b34c7ada5dd28261314b0cbc95275f190544668364627a9f8eb", size = 1063970, upload-time = "2026-05-30T17:34:20.859Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/b6/90/f73c63821f3e4047af474668fc99ae33ae571651f19271e85b984adcfc7c/rinui-0.4.2-py3-none-any.whl", hash = "sha256:0363e24a8607d08048b3ab3ef8e2a1d27a2a156c78ba1bce23dadef7714a87e7", size = 1124250, upload-time = "2026-07-19T15:35:45.563Z" },
 ]
 
 [[package]]
 name = "selenium"
-version = "4.44.0"
+version = "4.46.0"
 source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
 dependencies = [
     { name = "certifi" },
@@ -2540,9 +2542,9 @@ dependencies = [
     { name = "urllib3", extra = ["socks"] },
     { name = "websocket-client" },
 ]
-sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/2d/4a/6d0a4f4a07e2a91511a51398203ee82bf6ce644a448aaa35c59b44aa9531/selenium-4.44.0.tar.gz", hash = "sha256:b03a831fcfcab9d912b4682f60718c48a04560d6c62f7496c16b7498c9a4427e", size = 993133, upload-time = "2026-05-12T22:48:19.246Z" }
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/a0/53/053df98ef0c38535a74ea732217eb2dbfddc7ff5442a47a4b315ba577f85/selenium-4.46.0.tar.gz", hash = "sha256:54f7e1a4df5f7508ac8c38ce2ea584db1b27083dd79962b22524219219df5cbe", size = 1006000, upload-time = "2026-07-11T00:38:41.11Z" }
 wheels = [
-    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/1f/bc/885047e975e996cb317db31c4551caa915aafc6befea990f082c7233adc2/selenium-4.44.0-py3-none-any.whl", hash = "sha256:d01ea3e5ecad8149460a765f7cf5177194c21dcc0173093fc05427c289b1bf24", size = 9654291, upload-time = "2026-05-12T22:48:16.836Z" },
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/30/f4/365c723a37c7e9ba6a6a19bf0c9e407137703f56a72c6201d0e4cb1432cb/selenium-4.46.0-py3-none-any.whl", hash = "sha256:f03e864770a21ab32009961c9d015cb2c6275eba45c926c272e02d90af423aad", size = 9428587, upload-time = "2026-07-11T00:38:38.84Z" },
 ]
 
 [[package]]

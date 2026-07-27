@@ -5,8 +5,7 @@ from time import sleep
 import json
 from loguru import logger
 
-from core.python.utils import VideoTypes
-from src.core.python.directories import CONFIG_PATH
+from src.directories import CONFIGS_PATH
 
 
 class Timer:
@@ -18,7 +17,7 @@ class Timer:
 
     def __init__(self, force_mode=False) -> None:
         self.force_mode = force_mode
-        cfg_path = CONFIG_PATH / "schedule.json"
+        cfg_path = CONFIGS_PATH / "schedule.json"
         logger.debug("Loading schedule config from {}", cfg_path)
 
         if not cfg_path.exists():
@@ -107,23 +106,3 @@ class Timer:
         sleep(second)
 
 
-class Videos(Timer):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def get_video_type(self) -> VideoTypes:
-        weekday = self.weekday_name
-        type_str = "unknown"
-        for i in self.config["schedule"]:
-            if i["weekday"] == weekday:
-                type_str = i.get("videoType")
-                break
-
-        logger.debug("Determining video type for weekday {}: raw='{}'", weekday, type_str)
-
-        if type_str == "News":
-            return VideoTypes.NEWS
-        if type_str == "Documentary":
-            return VideoTypes.DOCUMENTARY
-
-        return VideoTypes.UNKNOWN
