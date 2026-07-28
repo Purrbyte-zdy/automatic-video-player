@@ -1,2 +1,2 @@
-from src.ui.python.central import AppCentral
-from src.directories import PathManager
+from ui.python.central import AppCentral
+from directories import PathManager
