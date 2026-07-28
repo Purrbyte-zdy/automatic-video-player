@@ -2,7 +2,7 @@
 name = "automatic-video-player"
 version = "0.1.0-pre1"
 description = "Automatic Playing News Every Day."
-requires-python = ">=3.12.0, <3.13"
+requires-python = ">=3.14.0, <3.15"
 dependencies = [
     "keyboard>=0.13.5",
     "loguru>=0.7.3",
