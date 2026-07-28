@@ -13,12 +13,7 @@ ColumnLayout {
         fillMode: Image.PreserveAspectCrop
         opacity: 0.5
         Component.onCompleted: {
-            if (typeof PathManager !== 'undefined' && PathManager !== null) {
-                backgroundImage.source = PathManager.images("logo.png")
-            } else {
-                // fallback: relative asset path (adjust if needed)
-                backgroundImage.source = "assets/images/logo.png"
-            }
+            backgroundImage.source = PathManager.images("logo.png")
         }
     }
     // keep the ButtonGroup in case other logic refers to it

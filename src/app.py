@@ -5,9 +5,9 @@ from PySide6.QtWidgets import QApplication
 from RinUI import RinUIWindow
 from loguru import logger
 
-# from src.core.python import setup_system_tray, ROOT_PATH
-from src.directories import ROOT_PATH, CONFIGS_PATH, LOGS_PATH, DRIVER_PATH, PathManager
-from src.core import AppCentral
+# from core.python import setup_system_tray, ROOT_PATH
+from directories import ROOT_PATH, CONFIGS_PATH, LOGS_PATH, DRIVER_PATH
+from core import AppCentral
 
 config_file = CONFIGS_PATH / "settings.json"
 with open(config_file, 'r+', encoding='UTF-8') as f: # Setting First Launch Mode.
@@ -32,8 +32,8 @@ if __name__ == '__main__':
     logger.info("App started.")
     app = QApplication(sys.argv)
     gallery = RinUIWindow("./ui/qml/app.qml")
-    instance1 = AppCentral()
+    instance = AppCentral()
+    instance.setup_qml_context(gallery)
     # setup_system_tray(app, gallery)
-    import src.core.python.utils.start_playing
     app.exec()
     logger.info("App ended.")
