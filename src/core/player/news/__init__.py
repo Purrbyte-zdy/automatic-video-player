@@ -9,14 +9,14 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.remote.webdriver import WebDriver
 from typing import cast
 
-from src.directories import CONFIG_PATH
+from directories import CONFIGS_PATH
 
 
 class PlayNews(object):
     def __init__(self) -> None:
-        '''
+        """
         Init the Browser.
-        '''
+        """
 
         '''
         to Ref: Use Selenium Manager to manage the driver instead of download by user.
@@ -35,7 +35,7 @@ class PlayNews(object):
         it's very convenient. :)
         '''
         
-        config_file = CONFIG_PATH / "settings.json" # Reading Config File.
+        config_file = CONFIGS_PATH / "settings.json" # Reading Config File.
         with open(config_file, 'r', encoding='UTF-8') as f:
             config = load(f)
         try:
@@ -67,17 +67,17 @@ class PlayNews(object):
             self.driver = None
 
     def setup_fullscreen(self) -> bool:
-        '''
+        """
         This function is to fullscreen the browser.
-        It use keyboard press F or Shift And F(Sometimes it may be Chinese) to fullscreen.
-        '''
+        It uses keyboard press F or Shift And F(Sometimes it may be Chinese) to fullscreen.
+        """
 
         if not getattr(self, "driver", None):
             logger.warning("No browser driver available for fullscreen setup.")
             return False
 
         # Cast driver to WebDriver for type checkers and use local variable
-        driver = cast(WebDriver, self.driver)
+        driver = self.driver
 
         try:
             press_and_release("f")
@@ -109,9 +109,9 @@ class PlayNews(object):
         return False
 
     def exit_playing(self) -> None:
-        '''
+        """
         Quiting Browser.
-        '''
+        """
         if self.driver:
             self.driver.quit()
             logger.info("The Browser has been closed.")

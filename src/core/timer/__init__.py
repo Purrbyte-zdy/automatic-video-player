@@ -5,7 +5,7 @@ from time import sleep
 import json
 from loguru import logger
 
-from src.directories import CONFIGS_PATH
+from directories import CONFIGS_PATH
 
 
 class Timer:
