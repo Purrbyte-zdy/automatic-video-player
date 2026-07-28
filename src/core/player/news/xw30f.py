@@ -2,8 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
-from src.core.python.player.news import PlayNews
-from core.python.utils.watchfish import Timer
+from core.player.news import PlayNews
+from core.timer import Timer
 from loguru import logger
 
 class Play(PlayNews):

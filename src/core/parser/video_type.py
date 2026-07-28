@@ -1,7 +1,7 @@
 from loguru import logger
 
-from core.python.utils import VideoTypes
-from core.python.utils.watchfish import Timer
+from core.parser import VideoTypes
+from core.timer import Timer
 
 
 class Videos(Timer):

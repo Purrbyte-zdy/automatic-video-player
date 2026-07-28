@@ -1,6 +1,6 @@
 from json import load, dump
 
-from src.directories import CONFIGS_PATH
+from directories import CONFIGS_PATH
 
 
 class ConfigEditor:
