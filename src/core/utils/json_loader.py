@@ -1,12 +1,12 @@
 from json import load, dump
 
-from core.python.directories import CONFIG_PATH
+from directories import CONFIGS_PATH
 
 
 class ConfigEditor:
     def __init__(self):
         self.config = {}
-        self.config_path = CONFIG_PATH / "settings.json"
+        self.config_path = CONFIGS_PATH / "settings.json"
 
     def _load(self):
         with open(self.config_path, 'r', encoding='UTF-8') as f:

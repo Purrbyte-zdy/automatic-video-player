@@ -1,17 +1,57 @@
 import os
+import sys
 
-from PySide6.QtCore import QObject, Slot
+from typing import Optional, Any, Protocol
 
-from src.core.python.utils.editor import ConfigEditor
-from src.core.python.directories import DRIVER_PATH
-from src.core.python.utils import VideoTypes
-from src.core.python.player.play_videos import play
+from PySide6.QtCore import QObject, Slot, Signal
+from PySide6.QtWidgets import QApplication
+
+from core.utils.json_loader import ConfigEditor
+from directories import DRIVER_PATH, PathManager, QML_PATH
+from core.parser import VideoTypes
+from core.player import play
 from loguru import logger
 
+
+class QmlContextWindow(Protocol):
+    engine: Any
+
+
 class AppCentral(QObject):
-    def __init__(self) -> None:
+    _instance: Optional[AppCentral] = None
+    initialized = Signal()
+
+    def __init__(self) -> None:  # 初始化
         super().__init__()
+
+        if AppCentral._instance is not None:
+            raise RuntimeError("AppCentral is a singleton. Use AppCentral.instance() instead.")
+        AppCentral._instance = self
+
+        self._initialize_cores()
+        logger.info("AppCentral initialization completed.")
+
         self.setup = Setup()
+
+    def _initialize_cores(self) -> None:
+        self.app_instance: Optional[QApplication] = QApplication.instance()
+        self.path_manager: PathManager = PathManager()  # 统一路径管理
+
+
+
+    @Slot()
+    def init(self) -> None:
+        self._continue_init()
+
+    def _continue_init(self) -> None:
+        self.initialized.emit()  # 发送信号
+        logger.info(f"Initialization completed.")
+
+    def setup_qml_context(self, window: QmlContextWindow) -> None:
+        context = window.engine.rootContext()
+        window.engine.addImportPath(QML_PATH)
+        context.setContextProperty("AppCentral", self)
+        context.setContextProperty("PathManager", self.path_manager)
 
     @Slot()
     def force_play(self) -> None:
@@ -44,7 +84,6 @@ class AppCentral(QObject):
     @Slot(int, int, int)
     def set_time(self, hour: int, minute: int, time_type: int) -> None:
         self.setup.set_time(hour, minute, time_type)
-
 
 
 class Setup(object):
@@ -88,6 +127,7 @@ class Setup(object):
 
         # todo: edit the schedule configuration with the new time
 
+
 class VideoPlay(object):
     def __init__(self) -> None:
         self.video_type = VideoTypes.NEWS
@@ -96,6 +136,7 @@ class VideoPlay(object):
     def normal_play() -> None:
         logger.info("Starting normal play")
         play(VideoTypes.UNKNOWN)
+
 
 class ForcePlay(VideoPlay):
     def __init__(self) -> None:
